@@ -354,6 +354,26 @@ func (s *FakeServer) createCapsule(w http.ResponseWriter, r *http.Request, names
 		}
 	case "wordpress":
 		capsuleType = "wordpress"
+		deploymentType, _ := body.Manifest["deploymentType"].(string)
+		switch deploymentType {
+		case "default":
+			if v, _ := body.Manifest["version"].(string); v == "" {
+				writeError(w, http.StatusBadRequest, "version is required when deploymentType is \"default\"")
+				return
+			}
+		case "git":
+			gitRepositoryID, _ := body.Manifest["gitRepositoryId"].(string)
+			branch, _ := body.Manifest["branch"].(string)
+			if gitRepositoryID == "" || branch == "" {
+				writeError(w, http.StatusBadRequest, "gitRepositoryId and branch are both required when deploymentType is \"git\"")
+				return
+			}
+			// git deployments go live on the next push, not on create - no
+			// deploy-triggering side effect here, matching the real backend.
+		default:
+			writeError(w, http.StatusBadRequest, "unsupported deploymentType")
+			return
+		}
 		manifest["publicAccessHostname"] = body.Name + ".test.ccdns.co"
 	default:
 		writeError(w, http.StatusBadRequest, "unsupported manifestType")

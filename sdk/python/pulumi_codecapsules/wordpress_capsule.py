@@ -24,14 +24,17 @@ class WordpressCapsuleArgs:
                  name: pulumi.Input[_builtins.str],
                  space_id: pulumi.Input[_builtins.str],
                  storage_capsule_id: pulumi.Input[_builtins.str],
+                 branch: Optional[pulumi.Input[_builtins.str]] = None,
                  cpu_qty: Optional[pulumi.Input[_builtins.float]] = None,
                  cpu_unit: Optional[pulumi.Input[_builtins.str]] = None,
                  deployment_type: Optional[pulumi.Input[_builtins.str]] = None,
                  description: Optional[pulumi.Input[_builtins.str]] = None,
                  env: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 git_repository_id: Optional[pulumi.Input[_builtins.str]] = None,
                  memory_qty: Optional[pulumi.Input[_builtins.float]] = None,
                  memory_unit: Optional[pulumi.Input[_builtins.str]] = None,
                  replicas: Optional[pulumi.Input[_builtins.int]] = None,
+                 source_subpath: Optional[pulumi.Input[_builtins.str]] = None,
                  storage_qty: Optional[pulumi.Input[_builtins.float]] = None,
                  storage_unit: Optional[pulumi.Input[_builtins.str]] = None,
                  version: Optional[pulumi.Input[_builtins.str]] = None):
@@ -42,23 +45,28 @@ class WordpressCapsuleArgs:
         :param pulumi.Input[_builtins.str] name: The capsule's name. Immutable after creation; changing it replaces the resource (renaming isn't supported).
         :param pulumi.Input[_builtins.str] space_id: The owning Space's id. Immutable after creation; changing it replaces the resource.
         :param pulumi.Input[_builtins.str] storage_capsule_id: The id of an existing StorageCapsule for this site's uploads/media. Immutable after creation; changing it replaces the resource.
+        :param pulumi.Input[_builtins.str] branch: The branch to deploy from. Required when deploymentType is "git", unused for "default". Immutable after creation; changing it replaces the resource. Note: creating a "git" capsule does not deploy anything by itself - the site goes live on the next push to this branch.
         :param pulumi.Input[_builtins.float] cpu_qty: CPU request quantity.
         :param pulumi.Input[_builtins.str] cpu_unit: CPU request unit, e.g. "m". Defaults to "m".
-        :param pulumi.Input[_builtins.str] deployment_type: Deployment type. Only "default" is supported; defaults to "default". Immutable after creation.
+        :param pulumi.Input[_builtins.str] deployment_type: Deployment type: "default" (stock WordPress version/image) or "git" (custom codebase from an already-connected repository). Defaults to "default". Immutable after creation.
         :param pulumi.Input[_builtins.str] description: The capsule's description. Mutable in place.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] env: Environment variables for the capsule. Replaces the full set on every change - useful for wiring in a RedisCapsule's connection details.
+        :param pulumi.Input[_builtins.str] git_repository_id: The id of a git repository already connected to Code Capsules (connect it via the dashboard first - this resource can only reference an existing connection, not create one). Required when deploymentType is "git", unused for "default". Immutable after creation; changing it replaces the resource.
         :param pulumi.Input[_builtins.float] memory_qty: Memory request quantity.
         :param pulumi.Input[_builtins.str] memory_unit: Memory request unit, e.g. "M". Defaults to "M".
         :param pulumi.Input[_builtins.int] replicas: Replica count. Defaults to 1.
+        :param pulumi.Input[_builtins.str] source_subpath: Subpath within the repository where the WordPress root lives, for repositories that aren't WordPress at their root. Optional in either deployment mode. Immutable after creation; changing it replaces the resource.
         :param pulumi.Input[_builtins.float] storage_qty: Storage request quantity.
         :param pulumi.Input[_builtins.str] storage_unit: Storage request unit, e.g. "Gi". Defaults to "Gi".
-        :param pulumi.Input[_builtins.str] version: The WordPress version to deploy. Required when deploymentType is "default". Immutable after creation; changing it replaces the resource.
+        :param pulumi.Input[_builtins.str] version: The WordPress version to deploy. Required when deploymentType is "default", unused for "git". Immutable after creation; changing it replaces the resource.
         """
         pulumi.set(__self__, "database_name", database_name)
         pulumi.set(__self__, "mysql_capsule_id", mysql_capsule_id)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "space_id", space_id)
         pulumi.set(__self__, "storage_capsule_id", storage_capsule_id)
+        if branch is not None:
+            pulumi.set(__self__, "branch", branch)
         if cpu_qty is not None:
             pulumi.set(__self__, "cpu_qty", cpu_qty)
         if cpu_unit is not None:
@@ -69,12 +77,16 @@ class WordpressCapsuleArgs:
             pulumi.set(__self__, "description", description)
         if env is not None:
             pulumi.set(__self__, "env", env)
+        if git_repository_id is not None:
+            pulumi.set(__self__, "git_repository_id", git_repository_id)
         if memory_qty is not None:
             pulumi.set(__self__, "memory_qty", memory_qty)
         if memory_unit is not None:
             pulumi.set(__self__, "memory_unit", memory_unit)
         if replicas is not None:
             pulumi.set(__self__, "replicas", replicas)
+        if source_subpath is not None:
+            pulumi.set(__self__, "source_subpath", source_subpath)
         if storage_qty is not None:
             pulumi.set(__self__, "storage_qty", storage_qty)
         if storage_unit is not None:
@@ -143,6 +155,18 @@ class WordpressCapsuleArgs:
         pulumi.set(self, "storage_capsule_id", value)
 
     @_builtins.property
+    @pulumi.getter
+    def branch(self) -> Optional[pulumi.Input[_builtins.str]]:
+        """
+        The branch to deploy from. Required when deploymentType is "git", unused for "default". Immutable after creation; changing it replaces the resource. Note: creating a "git" capsule does not deploy anything by itself - the site goes live on the next push to this branch.
+        """
+        return pulumi.get(self, "branch")
+
+    @branch.setter
+    def branch(self, value: Optional[pulumi.Input[_builtins.str]]):
+        pulumi.set(self, "branch", value)
+
+    @_builtins.property
     @pulumi.getter(name="cpuQty")
     def cpu_qty(self) -> Optional[pulumi.Input[_builtins.float]]:
         """
@@ -170,7 +194,7 @@ class WordpressCapsuleArgs:
     @pulumi.getter(name="deploymentType")
     def deployment_type(self) -> Optional[pulumi.Input[_builtins.str]]:
         """
-        Deployment type. Only "default" is supported; defaults to "default". Immutable after creation.
+        Deployment type: "default" (stock WordPress version/image) or "git" (custom codebase from an already-connected repository). Defaults to "default". Immutable after creation.
         """
         return pulumi.get(self, "deployment_type")
 
@@ -201,6 +225,18 @@ class WordpressCapsuleArgs:
     @env.setter
     def env(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]]):
         pulumi.set(self, "env", value)
+
+    @_builtins.property
+    @pulumi.getter(name="gitRepositoryId")
+    def git_repository_id(self) -> Optional[pulumi.Input[_builtins.str]]:
+        """
+        The id of a git repository already connected to Code Capsules (connect it via the dashboard first - this resource can only reference an existing connection, not create one). Required when deploymentType is "git", unused for "default". Immutable after creation; changing it replaces the resource.
+        """
+        return pulumi.get(self, "git_repository_id")
+
+    @git_repository_id.setter
+    def git_repository_id(self, value: Optional[pulumi.Input[_builtins.str]]):
+        pulumi.set(self, "git_repository_id", value)
 
     @_builtins.property
     @pulumi.getter(name="memoryQty")
@@ -239,6 +275,18 @@ class WordpressCapsuleArgs:
         pulumi.set(self, "replicas", value)
 
     @_builtins.property
+    @pulumi.getter(name="sourceSubpath")
+    def source_subpath(self) -> Optional[pulumi.Input[_builtins.str]]:
+        """
+        Subpath within the repository where the WordPress root lives, for repositories that aren't WordPress at their root. Optional in either deployment mode. Immutable after creation; changing it replaces the resource.
+        """
+        return pulumi.get(self, "source_subpath")
+
+    @source_subpath.setter
+    def source_subpath(self, value: Optional[pulumi.Input[_builtins.str]]):
+        pulumi.set(self, "source_subpath", value)
+
+    @_builtins.property
     @pulumi.getter(name="storageQty")
     def storage_qty(self) -> Optional[pulumi.Input[_builtins.float]]:
         """
@@ -266,7 +314,7 @@ class WordpressCapsuleArgs:
     @pulumi.getter
     def version(self) -> Optional[pulumi.Input[_builtins.str]]:
         """
-        The WordPress version to deploy. Required when deploymentType is "default". Immutable after creation; changing it replaces the resource.
+        The WordPress version to deploy. Required when deploymentType is "default", unused for "git". Immutable after creation; changing it replaces the resource.
         """
         return pulumi.get(self, "version")
 
@@ -281,17 +329,20 @@ class WordpressCapsule(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 branch: Optional[pulumi.Input[_builtins.str]] = None,
                  cpu_qty: Optional[pulumi.Input[_builtins.float]] = None,
                  cpu_unit: Optional[pulumi.Input[_builtins.str]] = None,
                  database_name: Optional[pulumi.Input[_builtins.str]] = None,
                  deployment_type: Optional[pulumi.Input[_builtins.str]] = None,
                  description: Optional[pulumi.Input[_builtins.str]] = None,
                  env: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 git_repository_id: Optional[pulumi.Input[_builtins.str]] = None,
                  memory_qty: Optional[pulumi.Input[_builtins.float]] = None,
                  memory_unit: Optional[pulumi.Input[_builtins.str]] = None,
                  mysql_capsule_id: Optional[pulumi.Input[_builtins.str]] = None,
                  name: Optional[pulumi.Input[_builtins.str]] = None,
                  replicas: Optional[pulumi.Input[_builtins.int]] = None,
+                 source_subpath: Optional[pulumi.Input[_builtins.str]] = None,
                  space_id: Optional[pulumi.Input[_builtins.str]] = None,
                  storage_capsule_id: Optional[pulumi.Input[_builtins.str]] = None,
                  storage_qty: Optional[pulumi.Input[_builtins.float]] = None,
@@ -302,22 +353,25 @@ class WordpressCapsule(pulumi.CustomResource):
         Create a WordpressCapsule resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[_builtins.str] branch: The branch to deploy from. Required when deploymentType is "git", unused for "default". Immutable after creation; changing it replaces the resource. Note: creating a "git" capsule does not deploy anything by itself - the site goes live on the next push to this branch.
         :param pulumi.Input[_builtins.float] cpu_qty: CPU request quantity.
         :param pulumi.Input[_builtins.str] cpu_unit: CPU request unit, e.g. "m". Defaults to "m".
         :param pulumi.Input[_builtins.str] database_name: The database name to use on the referenced MysqlCapsule. Immutable after creation; changing it replaces the resource.
-        :param pulumi.Input[_builtins.str] deployment_type: Deployment type. Only "default" is supported; defaults to "default". Immutable after creation.
+        :param pulumi.Input[_builtins.str] deployment_type: Deployment type: "default" (stock WordPress version/image) or "git" (custom codebase from an already-connected repository). Defaults to "default". Immutable after creation.
         :param pulumi.Input[_builtins.str] description: The capsule's description. Mutable in place.
         :param pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]] env: Environment variables for the capsule. Replaces the full set on every change - useful for wiring in a RedisCapsule's connection details.
+        :param pulumi.Input[_builtins.str] git_repository_id: The id of a git repository already connected to Code Capsules (connect it via the dashboard first - this resource can only reference an existing connection, not create one). Required when deploymentType is "git", unused for "default". Immutable after creation; changing it replaces the resource.
         :param pulumi.Input[_builtins.float] memory_qty: Memory request quantity.
         :param pulumi.Input[_builtins.str] memory_unit: Memory request unit, e.g. "M". Defaults to "M".
         :param pulumi.Input[_builtins.str] mysql_capsule_id: The id of an existing MysqlCapsule (must already be Ready) this site's database. Immutable after creation; changing it replaces the resource.
         :param pulumi.Input[_builtins.str] name: The capsule's name. Immutable after creation; changing it replaces the resource (renaming isn't supported).
         :param pulumi.Input[_builtins.int] replicas: Replica count. Defaults to 1.
+        :param pulumi.Input[_builtins.str] source_subpath: Subpath within the repository where the WordPress root lives, for repositories that aren't WordPress at their root. Optional in either deployment mode. Immutable after creation; changing it replaces the resource.
         :param pulumi.Input[_builtins.str] space_id: The owning Space's id. Immutable after creation; changing it replaces the resource.
         :param pulumi.Input[_builtins.str] storage_capsule_id: The id of an existing StorageCapsule for this site's uploads/media. Immutable after creation; changing it replaces the resource.
         :param pulumi.Input[_builtins.float] storage_qty: Storage request quantity.
         :param pulumi.Input[_builtins.str] storage_unit: Storage request unit, e.g. "Gi". Defaults to "Gi".
-        :param pulumi.Input[_builtins.str] version: The WordPress version to deploy. Required when deploymentType is "default". Immutable after creation; changing it replaces the resource.
+        :param pulumi.Input[_builtins.str] version: The WordPress version to deploy. Required when deploymentType is "default", unused for "git". Immutable after creation; changing it replaces the resource.
         """
         ...
     @overload
@@ -342,17 +396,20 @@ class WordpressCapsule(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 branch: Optional[pulumi.Input[_builtins.str]] = None,
                  cpu_qty: Optional[pulumi.Input[_builtins.float]] = None,
                  cpu_unit: Optional[pulumi.Input[_builtins.str]] = None,
                  database_name: Optional[pulumi.Input[_builtins.str]] = None,
                  deployment_type: Optional[pulumi.Input[_builtins.str]] = None,
                  description: Optional[pulumi.Input[_builtins.str]] = None,
                  env: Optional[pulumi.Input[Mapping[str, pulumi.Input[_builtins.str]]]] = None,
+                 git_repository_id: Optional[pulumi.Input[_builtins.str]] = None,
                  memory_qty: Optional[pulumi.Input[_builtins.float]] = None,
                  memory_unit: Optional[pulumi.Input[_builtins.str]] = None,
                  mysql_capsule_id: Optional[pulumi.Input[_builtins.str]] = None,
                  name: Optional[pulumi.Input[_builtins.str]] = None,
                  replicas: Optional[pulumi.Input[_builtins.int]] = None,
+                 source_subpath: Optional[pulumi.Input[_builtins.str]] = None,
                  space_id: Optional[pulumi.Input[_builtins.str]] = None,
                  storage_capsule_id: Optional[pulumi.Input[_builtins.str]] = None,
                  storage_qty: Optional[pulumi.Input[_builtins.float]] = None,
@@ -367,6 +424,7 @@ class WordpressCapsule(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = WordpressCapsuleArgs.__new__(WordpressCapsuleArgs)
 
+            __props__.__dict__["branch"] = branch
             __props__.__dict__["cpu_qty"] = cpu_qty
             __props__.__dict__["cpu_unit"] = cpu_unit
             if database_name is None and not opts.urn:
@@ -375,6 +433,7 @@ class WordpressCapsule(pulumi.CustomResource):
             __props__.__dict__["deployment_type"] = deployment_type
             __props__.__dict__["description"] = description
             __props__.__dict__["env"] = None if env is None else pulumi.Output.secret(env)
+            __props__.__dict__["git_repository_id"] = git_repository_id
             __props__.__dict__["memory_qty"] = memory_qty
             __props__.__dict__["memory_unit"] = memory_unit
             if mysql_capsule_id is None and not opts.urn:
@@ -384,6 +443,7 @@ class WordpressCapsule(pulumi.CustomResource):
                 raise TypeError("Missing required property 'name'")
             __props__.__dict__["name"] = name
             __props__.__dict__["replicas"] = replicas
+            __props__.__dict__["source_subpath"] = source_subpath
             if space_id is None and not opts.urn:
                 raise TypeError("Missing required property 'space_id'")
             __props__.__dict__["space_id"] = space_id
@@ -418,24 +478,32 @@ class WordpressCapsule(pulumi.CustomResource):
 
         __props__ = WordpressCapsuleArgs.__new__(WordpressCapsuleArgs)
 
+        __props__.__dict__["branch"] = None
         __props__.__dict__["cpu_qty"] = None
         __props__.__dict__["cpu_unit"] = None
         __props__.__dict__["database_name"] = None
         __props__.__dict__["deployment_type"] = None
         __props__.__dict__["description"] = None
         __props__.__dict__["env"] = None
+        __props__.__dict__["git_repository_id"] = None
         __props__.__dict__["hostname"] = None
         __props__.__dict__["memory_qty"] = None
         __props__.__dict__["memory_unit"] = None
         __props__.__dict__["mysql_capsule_id"] = None
         __props__.__dict__["name"] = None
         __props__.__dict__["replicas"] = None
+        __props__.__dict__["source_subpath"] = None
         __props__.__dict__["space_id"] = None
         __props__.__dict__["storage_capsule_id"] = None
         __props__.__dict__["storage_qty"] = None
         __props__.__dict__["storage_unit"] = None
         __props__.__dict__["version"] = None
         return WordpressCapsule(resource_name, opts=opts, __props__=__props__)
+
+    @_builtins.property
+    @pulumi.getter
+    def branch(self) -> pulumi.Output[Optional[_builtins.str]]:
+        return pulumi.get(self, "branch")
 
     @_builtins.property
     @pulumi.getter(name="cpuQty")
@@ -468,6 +536,11 @@ class WordpressCapsule(pulumi.CustomResource):
         return pulumi.get(self, "env")
 
     @_builtins.property
+    @pulumi.getter(name="gitRepositoryId")
+    def git_repository_id(self) -> pulumi.Output[Optional[_builtins.str]]:
+        return pulumi.get(self, "git_repository_id")
+
+    @_builtins.property
     @pulumi.getter
     def hostname(self) -> pulumi.Output[_builtins.str]:
         return pulumi.get(self, "hostname")
@@ -498,6 +571,11 @@ class WordpressCapsule(pulumi.CustomResource):
         return pulumi.get(self, "replicas")
 
     @_builtins.property
+    @pulumi.getter(name="sourceSubpath")
+    def source_subpath(self) -> pulumi.Output[Optional[_builtins.str]]:
+        return pulumi.get(self, "source_subpath")
+
+    @_builtins.property
     @pulumi.getter(name="spaceId")
     def space_id(self) -> pulumi.Output[_builtins.str]:
         return pulumi.get(self, "space_id")
@@ -519,6 +597,6 @@ class WordpressCapsule(pulumi.CustomResource):
 
     @_builtins.property
     @pulumi.getter
-    def version(self) -> pulumi.Output[_builtins.str]:
+    def version(self) -> pulumi.Output[Optional[_builtins.str]]:
         return pulumi.get(self, "version")
 

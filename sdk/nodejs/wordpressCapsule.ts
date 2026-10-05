@@ -31,23 +31,26 @@ export class WordpressCapsule extends pulumi.CustomResource {
         return obj['__pulumiType'] === WordpressCapsule.__pulumiType;
     }
 
+    declare public readonly branch: pulumi.Output<string | undefined>;
     declare public readonly cpuQty: pulumi.Output<number>;
     declare public readonly cpuUnit: pulumi.Output<string>;
     declare public readonly databaseName: pulumi.Output<string>;
     declare public readonly deploymentType: pulumi.Output<string>;
     declare public readonly description: pulumi.Output<string>;
     declare public readonly env: pulumi.Output<{[key: string]: string} | undefined>;
+    declare public readonly gitRepositoryId: pulumi.Output<string | undefined>;
     declare public /*out*/ readonly hostname: pulumi.Output<string>;
     declare public readonly memoryQty: pulumi.Output<number>;
     declare public readonly memoryUnit: pulumi.Output<string>;
     declare public readonly mysqlCapsuleId: pulumi.Output<string>;
     declare public readonly name: pulumi.Output<string>;
     declare public readonly replicas: pulumi.Output<number>;
+    declare public readonly sourceSubpath: pulumi.Output<string | undefined>;
     declare public readonly spaceId: pulumi.Output<string>;
     declare public readonly storageCapsuleId: pulumi.Output<string>;
     declare public readonly storageQty: pulumi.Output<number>;
     declare public readonly storageUnit: pulumi.Output<string>;
-    declare public readonly version: pulumi.Output<string>;
+    declare public readonly version: pulumi.Output<string | undefined>;
 
     /**
      * Create a WordpressCapsule resource with the given unique name, arguments, and options.
@@ -75,17 +78,20 @@ export class WordpressCapsule extends pulumi.CustomResource {
             if (args?.storageCapsuleId === undefined && !opts.urn) {
                 throw new Error("Missing required property 'storageCapsuleId'");
             }
+            resourceInputs["branch"] = args?.branch;
             resourceInputs["cpuQty"] = args?.cpuQty;
             resourceInputs["cpuUnit"] = args?.cpuUnit;
             resourceInputs["databaseName"] = args?.databaseName;
             resourceInputs["deploymentType"] = args?.deploymentType;
             resourceInputs["description"] = args?.description;
             resourceInputs["env"] = args?.env ? pulumi.secret(args.env) : undefined;
+            resourceInputs["gitRepositoryId"] = args?.gitRepositoryId;
             resourceInputs["memoryQty"] = args?.memoryQty;
             resourceInputs["memoryUnit"] = args?.memoryUnit;
             resourceInputs["mysqlCapsuleId"] = args?.mysqlCapsuleId;
             resourceInputs["name"] = args?.name;
             resourceInputs["replicas"] = args?.replicas;
+            resourceInputs["sourceSubpath"] = args?.sourceSubpath;
             resourceInputs["spaceId"] = args?.spaceId;
             resourceInputs["storageCapsuleId"] = args?.storageCapsuleId;
             resourceInputs["storageQty"] = args?.storageQty;
@@ -93,18 +99,21 @@ export class WordpressCapsule extends pulumi.CustomResource {
             resourceInputs["version"] = args?.version;
             resourceInputs["hostname"] = undefined /*out*/;
         } else {
+            resourceInputs["branch"] = undefined /*out*/;
             resourceInputs["cpuQty"] = undefined /*out*/;
             resourceInputs["cpuUnit"] = undefined /*out*/;
             resourceInputs["databaseName"] = undefined /*out*/;
             resourceInputs["deploymentType"] = undefined /*out*/;
             resourceInputs["description"] = undefined /*out*/;
             resourceInputs["env"] = undefined /*out*/;
+            resourceInputs["gitRepositoryId"] = undefined /*out*/;
             resourceInputs["hostname"] = undefined /*out*/;
             resourceInputs["memoryQty"] = undefined /*out*/;
             resourceInputs["memoryUnit"] = undefined /*out*/;
             resourceInputs["mysqlCapsuleId"] = undefined /*out*/;
             resourceInputs["name"] = undefined /*out*/;
             resourceInputs["replicas"] = undefined /*out*/;
+            resourceInputs["sourceSubpath"] = undefined /*out*/;
             resourceInputs["spaceId"] = undefined /*out*/;
             resourceInputs["storageCapsuleId"] = undefined /*out*/;
             resourceInputs["storageQty"] = undefined /*out*/;
@@ -123,6 +132,10 @@ export class WordpressCapsule extends pulumi.CustomResource {
  */
 export interface WordpressCapsuleArgs {
     /**
+     * The branch to deploy from. Required when deploymentType is "git", unused for "default". Immutable after creation; changing it replaces the resource. Note: creating a "git" capsule does not deploy anything by itself - the site goes live on the next push to this branch.
+     */
+    branch?: pulumi.Input<string>;
+    /**
      * CPU request quantity.
      */
     cpuQty?: pulumi.Input<number>;
@@ -135,7 +148,7 @@ export interface WordpressCapsuleArgs {
      */
     databaseName: pulumi.Input<string>;
     /**
-     * Deployment type. Only "default" is supported; defaults to "default". Immutable after creation.
+     * Deployment type: "default" (stock WordPress version/image) or "git" (custom codebase from an already-connected repository). Defaults to "default". Immutable after creation.
      */
     deploymentType?: pulumi.Input<string>;
     /**
@@ -146,6 +159,10 @@ export interface WordpressCapsuleArgs {
      * Environment variables for the capsule. Replaces the full set on every change - useful for wiring in a RedisCapsule's connection details.
      */
     env?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * The id of a git repository already connected to Code Capsules (connect it via the dashboard first - this resource can only reference an existing connection, not create one). Required when deploymentType is "git", unused for "default". Immutable after creation; changing it replaces the resource.
+     */
+    gitRepositoryId?: pulumi.Input<string>;
     /**
      * Memory request quantity.
      */
@@ -167,6 +184,10 @@ export interface WordpressCapsuleArgs {
      */
     replicas?: pulumi.Input<number>;
     /**
+     * Subpath within the repository where the WordPress root lives, for repositories that aren't WordPress at their root. Optional in either deployment mode. Immutable after creation; changing it replaces the resource.
+     */
+    sourceSubpath?: pulumi.Input<string>;
+    /**
      * The owning Space's id. Immutable after creation; changing it replaces the resource.
      */
     spaceId: pulumi.Input<string>;
@@ -183,7 +204,7 @@ export interface WordpressCapsuleArgs {
      */
     storageUnit?: pulumi.Input<string>;
     /**
-     * The WordPress version to deploy. Required when deploymentType is "default". Immutable after creation; changing it replaces the resource.
+     * The WordPress version to deploy. Required when deploymentType is "default", unused for "git". Immutable after creation; changing it replaces the resource.
      */
     version?: pulumi.Input<string>;
 }

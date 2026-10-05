@@ -484,6 +484,9 @@
     },
     "codecapsules:index:WordpressCapsule": {
       "properties": {
+        "branch": {
+          "type": "string"
+        },
         "cpuQty": {
           "type": "number"
         },
@@ -506,6 +509,9 @@
           },
           "secret": true
         },
+        "gitRepositoryId": {
+          "type": "string"
+        },
         "hostname": {
           "type": "string"
         },
@@ -523,6 +529,9 @@
         },
         "replicas": {
           "type": "integer"
+        },
+        "sourceSubpath": {
+          "type": "string"
         },
         "spaceId": {
           "type": "string"
@@ -544,7 +553,6 @@
         "spaceId",
         "name",
         "description",
-        "version",
         "deploymentType",
         "mysqlCapsuleId",
         "databaseName",
@@ -559,6 +567,10 @@
         "hostname"
       ],
       "inputProperties": {
+        "branch": {
+          "type": "string",
+          "description": "The branch to deploy from. Required when deploymentType is \"git\", unused for \"default\". Immutable after creation; changing it replaces the resource. Note: creating a \"git\" capsule does not deploy anything by itself - the site goes live on the next push to this branch."
+        },
         "cpuQty": {
           "type": "number",
           "description": "CPU request quantity."
@@ -573,7 +585,7 @@
         },
         "deploymentType": {
           "type": "string",
-          "description": "Deployment type. Only \"default\" is supported; defaults to \"default\". Immutable after creation."
+          "description": "Deployment type: \"default\" (stock WordPress version/image) or \"git\" (custom codebase from an already-connected repository). Defaults to \"default\". Immutable after creation."
         },
         "description": {
           "type": "string",
@@ -586,6 +598,10 @@
           },
           "description": "Environment variables for the capsule. Replaces the full set on every change - useful for wiring in a RedisCapsule's connection details.",
           "secret": true
+        },
+        "gitRepositoryId": {
+          "type": "string",
+          "description": "The id of a git repository already connected to Code Capsules (connect it via the dashboard first - this resource can only reference an existing connection, not create one). Required when deploymentType is \"git\", unused for \"default\". Immutable after creation; changing it replaces the resource."
         },
         "memoryQty": {
           "type": "number",
@@ -607,6 +623,10 @@
           "type": "integer",
           "description": "Replica count. Defaults to 1."
         },
+        "sourceSubpath": {
+          "type": "string",
+          "description": "Subpath within the repository where the WordPress root lives, for repositories that aren't WordPress at their root. Optional in either deployment mode. Immutable after creation; changing it replaces the resource."
+        },
         "spaceId": {
           "type": "string",
           "description": "The owning Space's id. Immutable after creation; changing it replaces the resource."
@@ -625,7 +645,7 @@
         },
         "version": {
           "type": "string",
-          "description": "The WordPress version to deploy. Required when deploymentType is \"default\". Immutable after creation; changing it replaces the resource."
+          "description": "The WordPress version to deploy. Required when deploymentType is \"default\", unused for \"git\". Immutable after creation; changing it replaces the resource."
         }
       },
       "requiredInputs": [
