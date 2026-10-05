@@ -57,7 +57,14 @@ Worth knowing if you extend this provider:
    cd bin
    npm publish --access public
    ```
-3. Python: `cd sdk/python && python -m build && twine upload dist/*`.
+3. Python needs one extra step too: `gen-sdk` writes `sdk/python/pulumi_codecapsules/README.md` (nested inside the package), but `pyproject.toml`'s `readme = "README.md"` expects it at `sdk/python/README.md` (next to `pyproject.toml`) — without copying it there, the build still succeeds but the PyPI page ends up with no description.
+   ```bash
+   cd sdk/python
+   cp pulumi_codecapsules/README.md README.md
+   python -m build
+   twine check dist/*
+   twine upload dist/*
+   ```
 4. Tag the release `vX.Y.Z` and attach cross-platform provider binaries to a GitHub Release — this is how `pulumi up` auto-downloads the matching plugin for either SDK:
    ```bash
    cd provider
