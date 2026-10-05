@@ -169,7 +169,7 @@ Outputs `privateHostname`, `privatePort`, and `privateConnectionString` (secret)
 
 ### `StorageCapsule`
 
-Persistent object storage inside a space. Same sizing inputs as above, no extra outputs.
+Persistent file storage inside a space, mounted as a directory other capsules can read and write to. Same sizing inputs as above, no extra outputs.
 
 ### `WordpressCapsule`
 
