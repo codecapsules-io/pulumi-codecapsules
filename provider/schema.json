@@ -1,0 +1,640 @@
+{
+  "name": "codecapsules",
+  "displayName": "Code Capsules",
+  "version": "0.1.0",
+  "description": "A Pulumi provider for Code Capsules platform resources: teams, spaces, and capsules (MySQL, Redis, storage, WordPress).",
+  "keywords": [
+    "codecapsules",
+    "pulumi",
+    "infrastructure-as-code"
+  ],
+  "homepage": "https://www.codecapsules.io",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/codecapsules-io/pulumi-codecapsules",
+  "pluginDownloadURL": "github://api.github.com/codecapsules-io/pulumi-codecapsules",
+  "language": {
+    "go": {
+      "importBasePath": "https://github.com/codecapsules-io/pulumi-codecapsules/sdk/go/codecapsules"
+    },
+    "nodejs": {
+      "packageName": "@codecapsules/pulumi",
+      "respectSchemaVersion": true
+    },
+    "python": {
+      "packageName": "pulumi_codecapsules",
+      "pyproject": {
+        "enabled": true
+      },
+      "respectSchemaVersion": true
+    }
+  },
+  "config": {
+    "variables": {
+      "apiKey": {
+        "type": "string",
+        "secret": true
+      },
+      "apiUrl": {
+        "type": "string"
+      },
+      "authApiKey": {
+        "type": "string",
+        "secret": true
+      },
+      "authBaseUrl": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string",
+        "secret": true
+      }
+    }
+  },
+  "provider": {
+    "properties": {
+      "apiKey": {
+        "type": "string",
+        "secret": true
+      },
+      "apiUrl": {
+        "type": "string"
+      },
+      "authApiKey": {
+        "type": "string",
+        "secret": true
+      },
+      "authBaseUrl": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string",
+        "secret": true
+      }
+    },
+    "inputProperties": {
+      "apiKey": {
+        "type": "string",
+        "secret": true
+      },
+      "apiUrl": {
+        "type": "string"
+      },
+      "authApiKey": {
+        "type": "string",
+        "secret": true
+      },
+      "authBaseUrl": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string",
+        "secret": true
+      }
+    }
+  },
+  "resources": {
+    "codecapsules:index:MysqlCapsule": {
+      "properties": {
+        "cpuQty": {
+          "type": "number"
+        },
+        "cpuUnit": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "memoryQty": {
+          "type": "number"
+        },
+        "memoryUnit": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "privateConnectionString": {
+          "type": "string",
+          "secret": true
+        },
+        "privateHostname": {
+          "type": "string"
+        },
+        "privatePort": {
+          "type": "string"
+        },
+        "replicas": {
+          "type": "integer"
+        },
+        "spaceId": {
+          "type": "string"
+        },
+        "storageQty": {
+          "type": "number"
+        },
+        "storageUnit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "spaceId",
+        "name",
+        "description",
+        "cpuQty",
+        "cpuUnit",
+        "memoryQty",
+        "memoryUnit",
+        "storageQty",
+        "storageUnit",
+        "replicas",
+        "privateHostname",
+        "privatePort",
+        "privateConnectionString"
+      ],
+      "inputProperties": {
+        "cpuQty": {
+          "type": "number",
+          "description": "CPU request quantity."
+        },
+        "cpuUnit": {
+          "type": "string",
+          "description": "CPU request unit, e.g. \"m\". Defaults to \"m\"."
+        },
+        "description": {
+          "type": "string",
+          "description": "The capsule's description. Mutable in place."
+        },
+        "memoryQty": {
+          "type": "number",
+          "description": "Memory request quantity."
+        },
+        "memoryUnit": {
+          "type": "string",
+          "description": "Memory request unit, e.g. \"M\". Defaults to \"M\"."
+        },
+        "name": {
+          "type": "string",
+          "description": "The capsule's name. Immutable after creation; changing it replaces the resource (renaming isn't supported)."
+        },
+        "replicas": {
+          "type": "integer",
+          "description": "Replica count. Defaults to 1."
+        },
+        "spaceId": {
+          "type": "string",
+          "description": "The owning Space's id. Immutable after creation; changing it replaces the resource."
+        },
+        "storageQty": {
+          "type": "number",
+          "description": "Storage request quantity."
+        },
+        "storageUnit": {
+          "type": "string",
+          "description": "Storage request unit, e.g. \"Gi\". Defaults to \"Gi\"."
+        }
+      },
+      "requiredInputs": [
+        "spaceId",
+        "name"
+      ]
+    },
+    "codecapsules:index:RedisCapsule": {
+      "properties": {
+        "cpuQty": {
+          "type": "number"
+        },
+        "cpuUnit": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "memoryQty": {
+          "type": "number"
+        },
+        "memoryUnit": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "privateConnectionString": {
+          "type": "string",
+          "secret": true
+        },
+        "privateHostname": {
+          "type": "string"
+        },
+        "privatePort": {
+          "type": "string"
+        },
+        "replicas": {
+          "type": "integer"
+        },
+        "spaceId": {
+          "type": "string"
+        },
+        "storageQty": {
+          "type": "number"
+        },
+        "storageUnit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "spaceId",
+        "name",
+        "description",
+        "cpuQty",
+        "cpuUnit",
+        "memoryQty",
+        "memoryUnit",
+        "storageQty",
+        "storageUnit",
+        "replicas",
+        "privateHostname",
+        "privatePort",
+        "privateConnectionString"
+      ],
+      "inputProperties": {
+        "cpuQty": {
+          "type": "number",
+          "description": "CPU request quantity."
+        },
+        "cpuUnit": {
+          "type": "string",
+          "description": "CPU request unit, e.g. \"m\". Defaults to \"m\"."
+        },
+        "description": {
+          "type": "string",
+          "description": "The capsule's description. Mutable in place."
+        },
+        "memoryQty": {
+          "type": "number",
+          "description": "Memory request quantity."
+        },
+        "memoryUnit": {
+          "type": "string",
+          "description": "Memory request unit, e.g. \"M\". Defaults to \"M\"."
+        },
+        "name": {
+          "type": "string",
+          "description": "The capsule's name. Immutable after creation; changing it replaces the resource (renaming isn't supported)."
+        },
+        "replicas": {
+          "type": "integer",
+          "description": "Replica count. Defaults to 1."
+        },
+        "spaceId": {
+          "type": "string",
+          "description": "The owning Space's id. Immutable after creation; changing it replaces the resource."
+        },
+        "storageQty": {
+          "type": "number",
+          "description": "Storage request quantity."
+        },
+        "storageUnit": {
+          "type": "string",
+          "description": "Storage request unit, e.g. \"Gi\". Defaults to \"Gi\"."
+        }
+      },
+      "requiredInputs": [
+        "spaceId",
+        "name"
+      ]
+    },
+    "codecapsules:index:Space": {
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "namespaceKey": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "teamId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "slug",
+        "teamId",
+        "clusterId",
+        "namespaceKey"
+      ],
+      "inputProperties": {
+        "clusterId": {
+          "type": "string",
+          "description": "The cluster this space's namespace is provisioned on. Immutable after creation; changing it replaces the resource."
+        },
+        "name": {
+          "type": "string",
+          "description": "The space's display name."
+        },
+        "slug": {
+          "type": "string",
+          "description": "The space's URL-safe slug. Immutable after creation; changing it replaces the resource."
+        },
+        "teamId": {
+          "type": "string",
+          "description": "The owning Team's id. Immutable after creation; changing it replaces the resource."
+        }
+      },
+      "requiredInputs": [
+        "name",
+        "slug",
+        "teamId",
+        "clusterId"
+      ]
+    },
+    "codecapsules:index:StorageCapsule": {
+      "properties": {
+        "cpuQty": {
+          "type": "number"
+        },
+        "cpuUnit": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "memoryQty": {
+          "type": "number"
+        },
+        "memoryUnit": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "replicas": {
+          "type": "integer"
+        },
+        "spaceId": {
+          "type": "string"
+        },
+        "storageQty": {
+          "type": "number"
+        },
+        "storageUnit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "spaceId",
+        "name",
+        "description",
+        "cpuQty",
+        "cpuUnit",
+        "memoryQty",
+        "memoryUnit",
+        "storageQty",
+        "storageUnit",
+        "replicas"
+      ],
+      "inputProperties": {
+        "cpuQty": {
+          "type": "number",
+          "description": "CPU request quantity."
+        },
+        "cpuUnit": {
+          "type": "string",
+          "description": "CPU request unit, e.g. \"m\". Defaults to \"m\"."
+        },
+        "description": {
+          "type": "string",
+          "description": "The capsule's description. Mutable in place."
+        },
+        "memoryQty": {
+          "type": "number",
+          "description": "Memory request quantity."
+        },
+        "memoryUnit": {
+          "type": "string",
+          "description": "Memory request unit, e.g. \"M\". Defaults to \"M\"."
+        },
+        "name": {
+          "type": "string",
+          "description": "The capsule's name. Immutable after creation; changing it replaces the resource (renaming isn't supported)."
+        },
+        "replicas": {
+          "type": "integer",
+          "description": "Replica count. Defaults to 1."
+        },
+        "spaceId": {
+          "type": "string",
+          "description": "The owning Space's id. Immutable after creation; changing it replaces the resource."
+        },
+        "storageQty": {
+          "type": "number",
+          "description": "Storage size requested. This is the primary sizing knob for a storage capsule."
+        },
+        "storageUnit": {
+          "type": "string",
+          "description": "Storage size unit, e.g. \"Gi\". Defaults to \"Gi\"."
+        }
+      },
+      "requiredInputs": [
+        "spaceId",
+        "name"
+      ]
+    },
+    "codecapsules:index:Team": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "slug"
+      ],
+      "inputProperties": {
+        "name": {
+          "type": "string",
+          "description": "The team's display name."
+        },
+        "slug": {
+          "type": "string",
+          "description": "The team's URL-safe slug. Immutable after creation; changing it replaces the resource."
+        }
+      },
+      "requiredInputs": [
+        "name",
+        "slug"
+      ]
+    },
+    "codecapsules:index:WordpressCapsule": {
+      "properties": {
+        "cpuQty": {
+          "type": "number"
+        },
+        "cpuUnit": {
+          "type": "string"
+        },
+        "databaseName": {
+          "type": "string"
+        },
+        "deploymentType": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "secret": true
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "memoryQty": {
+          "type": "number"
+        },
+        "memoryUnit": {
+          "type": "string"
+        },
+        "mysqlCapsuleId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "replicas": {
+          "type": "integer"
+        },
+        "spaceId": {
+          "type": "string"
+        },
+        "storageCapsuleId": {
+          "type": "string"
+        },
+        "storageQty": {
+          "type": "number"
+        },
+        "storageUnit": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "spaceId",
+        "name",
+        "description",
+        "version",
+        "deploymentType",
+        "mysqlCapsuleId",
+        "databaseName",
+        "storageCapsuleId",
+        "cpuQty",
+        "cpuUnit",
+        "memoryQty",
+        "memoryUnit",
+        "storageQty",
+        "storageUnit",
+        "replicas",
+        "hostname"
+      ],
+      "inputProperties": {
+        "cpuQty": {
+          "type": "number",
+          "description": "CPU request quantity."
+        },
+        "cpuUnit": {
+          "type": "string",
+          "description": "CPU request unit, e.g. \"m\". Defaults to \"m\"."
+        },
+        "databaseName": {
+          "type": "string",
+          "description": "The database name to use on the referenced MysqlCapsule. Immutable after creation; changing it replaces the resource."
+        },
+        "deploymentType": {
+          "type": "string",
+          "description": "Deployment type. Only \"default\" is supported; defaults to \"default\". Immutable after creation."
+        },
+        "description": {
+          "type": "string",
+          "description": "The capsule's description. Mutable in place."
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Environment variables for the capsule. Replaces the full set on every change - useful for wiring in a RedisCapsule's connection details.",
+          "secret": true
+        },
+        "memoryQty": {
+          "type": "number",
+          "description": "Memory request quantity."
+        },
+        "memoryUnit": {
+          "type": "string",
+          "description": "Memory request unit, e.g. \"M\". Defaults to \"M\"."
+        },
+        "mysqlCapsuleId": {
+          "type": "string",
+          "description": "The id of an existing MysqlCapsule (must already be Ready) this site's database. Immutable after creation; changing it replaces the resource."
+        },
+        "name": {
+          "type": "string",
+          "description": "The capsule's name. Immutable after creation; changing it replaces the resource (renaming isn't supported)."
+        },
+        "replicas": {
+          "type": "integer",
+          "description": "Replica count. Defaults to 1."
+        },
+        "spaceId": {
+          "type": "string",
+          "description": "The owning Space's id. Immutable after creation; changing it replaces the resource."
+        },
+        "storageCapsuleId": {
+          "type": "string",
+          "description": "The id of an existing StorageCapsule for this site's uploads/media. Immutable after creation; changing it replaces the resource."
+        },
+        "storageQty": {
+          "type": "number",
+          "description": "Storage request quantity."
+        },
+        "storageUnit": {
+          "type": "string",
+          "description": "Storage request unit, e.g. \"Gi\". Defaults to \"Gi\"."
+        },
+        "version": {
+          "type": "string",
+          "description": "The WordPress version to deploy. Required when deploymentType is \"default\". Immutable after creation; changing it replaces the resource."
+        }
+      },
+      "requiredInputs": [
+        "spaceId",
+        "name",
+        "mysqlCapsuleId",
+        "databaseName",
+        "storageCapsuleId"
+      ]
+    }
+  }
+}
